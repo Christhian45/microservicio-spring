@@ -30,7 +30,6 @@ steps:
   inputs:
     gradleWrapperFile: 'gradlew'
     tasks: 'sonar'
-    workingDirectory: '$(Build.SourcesDirectory)'
     publishJUnitResults: false
     testResultsFiles: '**/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
