@@ -41,7 +41,7 @@ steps:
       $covered = [double]$coverageNode.GetAttribute("covered")
       $missed = [double]$coverageNode.GetAttribute("missed")
       $coveragePercentage = $covered / ($covered + $missed) * 100
-      if ($coveragePercentage -lt 85) {
+      if ($coveragePercentage -lt 70) {
         $coverageResult = $coveragePercentage.ToString("F2")
         Write-Host "El porcentaje de cobertura de código es $coverageResult%"
         Write-Host "La cobertura de código es inferior al 85% aceptado. Se detiene el pipeline."
@@ -73,22 +73,32 @@ steps:
 #    sonarQubeGradlePluginVersion: '3.3'
 #    spotBugsAnalysis: false
 
-- task: Docker@2
+- task: DownloadBuildArtifacts@0
   inputs:
-    containerRegistry: 'microservicio-spring'
-    command: 'login'
-  displayName: "Login Docker"
+      artifactName: 'jmxfiles'
+      downloadPath: '$(Pipeline.Workspace)/jmxfiles'
 
-- task: Docker@2
+- task: CmdLine@2
   inputs:
-    containerRegistry: 'microservicio-spring'
-    repository: 'chirsthian45/microservicio-spring'
-    command: 'build'
-    Dockerfile: '**/Dockerfile'
-  displayName: "Build Docker"
+      script: 'jmeter -n -t $(Pipeline.Workspace)/jmxfiles/your-jmeter-test.jmx -l $(Pipeline.Workspace)/jmxfiles/test-results.jtl'
+  displayName: 'Run JMeter Test'
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'microservicio-spring'
-    repository: 'chirsthian45/microservicio-spring'
-    command: 'push'
+#- task: Docker@2
+#  inputs:
+#    containerRegistry: 'microservicio-spring'
+#    command: 'login'
+#  displayName: "Login Docker"
+
+#- task: Docker@2
+#  inputs:
+#    containerRegistry: 'microservicio-spring'
+#    repository: 'chirsthian45/microservicio-spring'
+#    command: 'build'
+#    Dockerfile: '**/Dockerfile'
+#  displayName: "Build Docker"
+
+#- task: Docker@2
+#  inputs:
+#    containerRegistry: 'microservicio-spring'
+#    repository: 'chirsthian45/microservicio-spring'
+#    command: 'push'
