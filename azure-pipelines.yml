@@ -41,6 +41,9 @@ steps:
               $coverageNode = $xmlDoc.SelectNodes("//counter[@type='INSTRUCTION']")[0]
               $covered = [double]$coverageNode.GetAttribute("covered")
               $missed = [double]$coverageNode.GetAttribute("missed")
+              Write-Host $coverageNode
+              Write-Host $covered
+              Write-Host $missed
               $coveragePercentage = $covered / ($covered + $missed) * 100
 
               Write-Host $coveragePercentage
