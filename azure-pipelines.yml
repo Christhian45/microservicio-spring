@@ -36,8 +36,8 @@ steps:
       $reportFile = Get-ChildItem -Path ./build/reports/jacoco/test/jacocoTestReport.xml
       $content = Get-Content -Path $reportFile
       $coverageNode = [xml]$content | Select-Xml -XPath "//counter[@type='INSTRUCTION']"
-      $covered = [double]$coverageNode.Node.covered
-      $missed = [double]$coverageNode.Node.missed
+      $covered = [double]$coverageNode.Node | Select-Object -ExpandProperty covered
+      $missed = [double]$coverageNode.Node | Select-Object -ExpandProperty missed
       $coveragePercentage = $covered / ($covered + $missed) * 100
       
       if ($coveragePercentage -lt 80) {
