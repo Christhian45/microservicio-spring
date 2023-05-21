@@ -38,7 +38,7 @@ steps:
               Write-Host $content
               $xmlDoc = New-Object -TypeName System.Xml.XmlDocument
               $xmlDoc.LoadXml($content)
-              $coverageNode = $xmlDoc.SelectNodes("//counter[@type='INSTRUCTION']")[0]
+              $coverageNode = $xmlDoc.SelectNodes("/report/counter[@type='INSTRUCTION']")[0]
               $covered = [double]$coverageNode.GetAttribute("covered")
               $missed = [double]$coverageNode.GetAttribute("missed")
               Write-Host $coverageNode
