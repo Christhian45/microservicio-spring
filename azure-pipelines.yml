@@ -21,12 +21,12 @@ steps:
   displayName: 'Build'
 
 - task: PublishCodeCoverageResults@1
- inputs:
-   codeCoverageTool: 'JaCoCo'
-   summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test/jacocoTestReport.xml'
-   pathToSources: '$(System.DefaultWorkingDirectory)/src/main/java/'
-   reportDirectory: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test'
-   failIfCoverageEmpty: true
+  inputs:
+    codeCoverageTool: 'JaCoCo'
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test/jacocoTestReport.xml'
+    pathToSources: '$(System.DefaultWorkingDirectory)/src/main/java/'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test'
+    failIfCoverageEmpty: true
 
 #- task: SonarCloudPrepare@1
 #  inputs:
