@@ -9,7 +9,6 @@ steps:
       git fetch --unshallow
   displayName: 'git-fetch'
 
-
 - task: Gradle@3
   inputs:
     gradleWrapperFile: 'gradlew'
@@ -21,22 +20,42 @@ steps:
     spotBugsAnalysis: false
   displayName: 'Build'
 
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: 'Sonar-azure-DevOps-v4'
-    organization: 'christhian45'
-    projectKey: 'Christhian45_microservicio-spring'
-    projectName: 'microservicio-spring'
-  displayName: 'SonarCloud'
+#- task: SonarCloudPrepare@1
+#  inputs:
+#    SonarCloud: 'Sonar-azure-DevOps-v4'
+#    organization: 'christhian45'
+#    projectKey: 'Christhian45_microservicio-spring'
+#    projectName: 'microservicio-spring'
+#  displayName: 'SonarCloud'
+#
+#- task: Gradle@3
+#  inputs:
+#    gradleWrapperFile: 'gradlew'
+#    tasks: 'sonar'
+#    publishJUnitResults: false
+#    testResultsFiles: '**/TEST-*.xml'
+#    javaHomeOption: 'JDKVersion'
+#    sonarQubeRunAnalysis: true
+#    sqGradlePluginVersionChoice: 'specify'
+#    sonarQubeGradlePluginVersion: '3.3'
+#    spotBugsAnalysis: false
 
-- task: Gradle@3
+- task: Docker@2
   inputs:
-    gradleWrapperFile: 'gradlew'
-    tasks: 'sonar'
-    publishJUnitResults: false
-    testResultsFiles: '**/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'
-    sonarQubeRunAnalysis: true
-    sqGradlePluginVersionChoice: 'specify'
-    sonarQubeGradlePluginVersion: '3.3'
-    spotBugsAnalysis: false
+    containerRegistry: 'microservicio-spring'
+    command: 'login'
+  displayName: "Login Docker"
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'microservicio-spring'
+    repository: 'chirsthian45/microservicio-spring'
+    command: 'build'
+    Dockerfile: '**/Dockerfile'
+  displayName: "Build Docker"
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'microservicio-spring'
+    repository: 'chirsthian45/microservicio-spring'
+    command: 'push'
