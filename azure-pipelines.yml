@@ -35,25 +35,20 @@ steps:
     script: |
       $reportFile = Get-ChildItem -Path $(System.DefaultWorkingDirectory)/build/reports/jacoco/test/jacocoTestReport.xml
               $content = Get-Content -Path $reportFile
-              Write-Host $content
               $xmlDoc = New-Object -TypeName System.Xml.XmlDocument
               $xmlDoc.LoadXml($content)
               $coverageNode = $xmlDoc.SelectNodes("/report/counter[@type='INSTRUCTION']")[0]
               $covered = [double]$coverageNode.GetAttribute("covered")
               $missed = [double]$coverageNode.GetAttribute("missed")
-              Write-Host $coverageNode
-              Write-Host $covered
-              Write-Host $missed
               $coveragePercentage = $covered / ($covered + $missed) * 100
-
-              Write-Host $coveragePercentage
-
               if ($coveragePercentage -lt 80) {
-                Write-Host "La cobertura de código es inferior al 80%. Se detiene el pipeline."
+                Write-Host "El porcentaje de cobertura de código es $(coverageResult)%"
+                Write-Host "La cobertura de código es inferior al 85% aceptado. Se detiene el pipeline."
                 exit 1
               }
               else {
-                Write-Host "La cobertura de código es superior al 80%. Se detiene el pipeline."
+                Write-Host "El porcentaje de cobertura de código es $(coverageResult)%"
+                Write-Host "La cobertura de código es superior al 80%. Se sigue flujo de pipeline."
               }
   displayName: "Verificar resultados Jacoco"
 
