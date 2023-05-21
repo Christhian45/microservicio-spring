@@ -33,7 +33,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $reportFile = Get-ChildItem -Path ./build/reports/jacoco/test/jacocoTestReport.xml
+      $reportFile = Get-ChildItem -Path $(System.DefaultWorkingDirectory)/build/reports/jacoco/test/jacocoTestReport.xml
               $content = Get-Content -Path $reportFile
               $xmlDoc = New-Object -TypeName System.Xml.XmlDocument
               $xmlDoc.LoadXml($content)
