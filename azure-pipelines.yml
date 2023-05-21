@@ -34,16 +34,16 @@ steps:
     targetType: 'inline'
     script: |
       $reportFile = Get-ChildItem -Path ./build/reports/jacoco/test/jacocoTestReport.xml
-      $content = Get-Content -Path $reportFile
-      $coverageNode = [xml]$content | Select-Xml -XPath "//counter[@type='INSTRUCTION']"
-      $covered = [double]$coverageNode.Node | Select-Object -ExpandProperty covered
-      $missed = [double]$coverageNode.Node | Select-Object -ExpandProperty missed
-      $coveragePercentage = $covered / ($covered + $missed) * 100
+              $content = Get-Content -Path $reportFile
+              $coverageNode = [xml]$content.SelectSingleNode("//counter[@type='INSTRUCTION']")
+              $covered = [double]$coverageNode.covered
+              $missed = [double]$coverageNode.missed
+              $coveragePercentage = $covered / ($covered + $missed) * 100
       
-      if ($coveragePercentage -lt 80) {
-        Write-Host "La cobertura de código es inferior al 80%. Se detiene el pipeline."
-        exit 1
-      }
+              if ($coveragePercentage -lt 80) {
+                Write-Host "La cobertura de código es inferior al 80%. Se detiene el pipeline."
+                exit 1
+              }
   displayName: "Verificar resultados Jacoco"
 
 #- task: SonarCloudPrepare@1
