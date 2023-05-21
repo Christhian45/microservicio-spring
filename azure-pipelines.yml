@@ -73,19 +73,16 @@ steps:
 #    sonarQubeGradlePluginVersion: '3.3'
 #    spotBugsAnalysis: false
 
-- script: |
-      sudo apt-get update
-      sudo apt-get install -y openjdk-8-jre-headless
-      wget https://downloads.apache.org/jmeter/binaries/apache-jmeter-5.4.1.tgz
-      tar -xf apache-jmeter-5.4.1.tgz
-      rm apache-jmeter-5.4.1.tgz
-      export PATH=$(Agent.BuildDirectory)/apache-jmeter-5.4.1/bin:$PATH
-  displayName: 'Install JMeter'
 
-- task: CmdLine@2
-  inputs:
-      script: 'jmeter -n -t $(Build.SourcesDirectory)/microservicio-spring.jmx -l $(Build.SourcesDirectory)/test-results.jtl'
+- script: |
+      docker run --rm \
+        -v $(Build.SourcesDirectory):/work \
+        -w /work \
+        justb4/jmeter:latest \
+        jmeter -n -t $(Build.SourcesDirectory)/microservicio-spring.jmx -l $(Build.SourcesDirectory)/test-results.jtl
   displayName: 'Run JMeter Test'
+
+
 
 #- task: Docker@2
 #  inputs:
