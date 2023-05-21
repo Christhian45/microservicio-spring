@@ -5,6 +5,9 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+- script: |
+      git fetch --unshallow
+  displayName: 'git-fetch'
 
 
 - task: Gradle@3
@@ -29,11 +32,11 @@ steps:
 - task: Gradle@3
   inputs:
     gradleWrapperFile: 'gradlew'
-    tasks: 'sonarqube'
-    publishJUnitResults: true
+    tasks: 'sonar'
+    publishJUnitResults: false
     testResultsFiles: '**/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
     sonarQubeRunAnalysis: true
     sqGradlePluginVersionChoice: 'specify'
-    sonarQubeGradlePluginVersion: '3.5.0.2730'
+    sonarQubeGradlePluginVersion: '3.3'
     spotBugsAnalysis: false
