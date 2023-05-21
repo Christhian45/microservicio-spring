@@ -73,14 +73,9 @@ steps:
 #    sonarQubeGradlePluginVersion: '3.3'
 #    spotBugsAnalysis: false
 
-- task: DownloadBuildArtifacts@0
-  inputs:
-      artifactName: 'jmxfiles'
-      downloadPath: '$(Pipeline.Workspace)/jmxfiles'
-
 - task: CmdLine@2
   inputs:
-      script: 'jmeter -n -t $(Pipeline.Workspace)/jmxfiles/your-jmeter-test.jmx -l $(Pipeline.Workspace)/jmxfiles/test-results.jtl'
+      script: 'jmeter -n -t $(Build.SourcesDirectory)/microservicio-spring.jmx -l $(Build.SourcesDirectory)/test-results.jtl'
   displayName: 'Run JMeter Test'
 
 #- task: Docker@2
