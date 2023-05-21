@@ -34,22 +34,23 @@ steps:
     targetType: 'inline'
     script: |
       $reportFile = Get-ChildItem -Path $(System.DefaultWorkingDirectory)/build/reports/jacoco/test/jacocoTestReport.xml
-              $content = Get-Content -Path $reportFile
-              $xmlDoc = New-Object -TypeName System.Xml.XmlDocument
-              $xmlDoc.LoadXml($content)
-              $coverageNode = $xmlDoc.SelectNodes("/report/counter[@type='INSTRUCTION']")[0]
-              $covered = [double]$coverageNode.GetAttribute("covered")
-              $missed = [double]$coverageNode.GetAttribute("missed")
-              $coveragePercentage = $covered / ($covered + $missed) * 100
-              if ($coveragePercentage -lt 80) {
-                Write-Host "El porcentaje de cobertura de código es $(coverageResult)%"
-                Write-Host "La cobertura de código es inferior al 85% aceptado. Se detiene el pipeline."
-                exit 1
-              }
-              else {
-                Write-Host "El porcentaje de cobertura de código es $(coverageResult)%"
-                Write-Host "La cobertura de código es superior al 80%. Se sigue flujo de pipeline."
-              }
+      $content = Get-Content -Path $reportFile
+      $xmlDoc = New-Object -TypeName System.Xml.XmlDocument
+      $xmlDoc.LoadXml($content)
+      $coverageNode = $xmlDoc.SelectNodes("/report/counter[@type='INSTRUCTION']")[0]
+      $covered = [double]$coverageNode.GetAttribute("covered")
+      $missed = [double]$coverageNode.GetAttribute("missed")
+      $coveragePercentage = $covered / ($covered + $missed) * 100
+      if ($coveragePercentage -lt 85) {
+        $coverageResult = $coveragePercentage.ToString("F2")
+        Write-Host "El porcentaje de cobertura de código es $coverageResult%"
+        Write-Host "La cobertura de código es inferior al 85% aceptado. Se detiene el pipeline."
+        exit 1
+      } else {
+        $coverageResult = $coveragePercentage.ToString("F2")
+        Write-Host "El porcentaje de cobertura de código es $coverageResult%"
+        Write-Host "La cobertura de código es superior al 85%. Se sigue flujo de pipeline."
+      }
   displayName: "Verificar resultados Jacoco"
 
 #- task: SonarCloudPrepare@1
