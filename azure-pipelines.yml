@@ -9,14 +9,6 @@ steps:
       git fetch --unshallow
   displayName: 'git-fetch'
 
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: 'JaCoCo'
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test/jacocoTestReport.xml'
-    pathToSources: '$(System.DefaultWorkingDirectory)/src/main/java/'
-    reportDirectory: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test'
-    failIfCoverageEmpty: true
-  displayName: "JaCoCo CoverageResults"
 - task: Gradle@3
   inputs:
     gradleWrapperFile: 'gradlew'
@@ -28,7 +20,26 @@ steps:
     spotBugsAnalysis: false
   displayName: 'Build'
 
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'JaCoCo'
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test/jacocoTestReport.xml'
+    pathToSources: '$(System.DefaultWorkingDirectory)/src/main/java/'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test'
+    failIfCoverageEmpty: true
+  displayName: "JaCoCo CoverageResults"
 
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      $reportFile = Get-ChildItem -Path ./build/reports/jacoco/test/jacocoTestReport.xml
+      $content = Get-Content -Path $reportFile
+      if ($content -match 'BUILD FAILED') {
+        Write-Host "La cobertura de código no es suficiente. Se detiene el pipeline."
+        exit 1
+      }
+  displayName: "Verificar resultados Jacoco"
 
 #- task: SonarCloudPrepare@1
 #  inputs:
