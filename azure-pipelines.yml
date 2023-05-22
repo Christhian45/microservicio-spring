@@ -79,7 +79,7 @@ steps:
         -v $(Build.SourcesDirectory):/work \
         -w /work \
         vmarrazzo/jmeter \
-         -n -t $(Build.SourcesDirectory)/microservicio-spring.jmx -l $(Build.SourcesDirectory)/test-results.jtl
+        -n -t microservicio-spring.jmx -l test-results.jtl
   displayName: 'Run JMeter Test'
 
 
