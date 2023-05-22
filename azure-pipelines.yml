@@ -53,36 +53,32 @@ steps:
       }
   displayName: "Verificar resultados Jacoco"
 
-#- task: SonarCloudPrepare@1
-#  inputs:
-#    SonarCloud: 'Sonar-azure-DevOps-v4'
-#    organization: 'christhian45'
-#    projectKey: 'Christhian45_microservicio-spring'
-#    projectName: 'microservicio-spring'
-#  displayName: 'SonarCloud'
-#
-#- task: Gradle@3
-#  inputs:
-#    gradleWrapperFile: 'gradlew'
-#    tasks: 'sonar'
-#    publishJUnitResults: false
-#    testResultsFiles: '**/TEST-*.xml'
-#    javaHomeOption: 'JDKVersion'
-#    sonarQubeRunAnalysis: true
-#    sqGradlePluginVersionChoice: 'specify'
-#    sonarQubeGradlePluginVersion: '3.3'
-#    spotBugsAnalysis: false
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'Sonar-azure-DevOps-v4'
+    organization: 'christhian45'
+    projectKey: 'Christhian45_microservicio-spring'
+    projectName: 'microservicio-spring'
+  displayName: 'Conexion SonarCloud'
 
+- task: Gradle@3
+  inputs:
+    gradleWrapperFile: 'gradlew'
+    tasks: 'sonar'
+    publishJUnitResults: false
+    testResultsFiles: '**/TEST-*.xml'
+    javaHomeOption: 'JDKVersion'
+    sonarQubeRunAnalysis: true
+    sqGradlePluginVersionChoice: 'specify'
+    sonarQubeGradlePluginVersion: '3.3'
+    spotBugsAnalysis: false
+  displayName: "Gradlew Sonar"
 
-- script: |
-      docker run --rm \
-        -v $(Build.SourcesDirectory):/work \
-        -w /work \
-        vmarrazzo/jmeter \
-        -n -t microservicio-spring.jmx -l test-results.jtl
-  displayName: 'Run JMeter Test'
-
-
+- task: sonarcloud-buildbreaker@2
+  inputs:
+    SonarCloud: 'Sonar-azure-DevOps-v4'
+    organization: 'christhian45'
+  displayName: "Break de sonar"
 
 #- task: Docker@2
 #  inputs:
@@ -103,3 +99,11 @@ steps:
 #    containerRegistry: 'microservicio-spring'
 #    repository: 'chirsthian45/microservicio-spring'
 #    command: 'push'
+
+- script: |
+      docker run --rm \
+        -v $(Build.SourcesDirectory):/work \
+        -w /work \
+        vmarrazzo/jmeter \
+        -n -t microservicio-spring.jmx -l test-results.jtl
+  displayName: 'Run JMeter Test'
