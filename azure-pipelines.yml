@@ -81,24 +81,25 @@ steps:
   displayName: "Break de sonar"
 
 - task: Docker@2
- inputs:
-   containerRegistry: 'microservicio-spring'
-   command: 'login'
- displayName: "Login Docker"
+  inputs:
+    containerRegistry: 'microservicio-spring'
+    command: 'login'
+  displayName: "Login Docker"
 
 - task: Docker@2
- inputs:
-   containerRegistry: 'microservicio-spring'
-   repository: 'chirsthian45/microservicio-spring'
-   command: 'build'
-   Dockerfile: '**/Dockerfile'
- displayName: "Build Docker"
+  inputs:
+    containerRegistry: 'microservicio-spring'
+    repository: 'chirsthian45/microservicio-spring'
+    command: 'build'
+    Dockerfile: '**/Dockerfile'
+  displayName: "Build Docker"
 
 - task: Docker@2
- inputs:
-   containerRegistry: 'microservicio-spring'
-   repository: 'chirsthian45/microservicio-spring'
-   command: 'push'
+  inputs:
+    containerRegistry: 'microservicio-spring'
+    repository: 'chirsthian45/microservicio-spring'
+    command: 'push'
+  displayName: "Push Docker"
 
 - script: |
       docker run --rm \
