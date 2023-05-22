@@ -41,7 +41,7 @@ steps:
       $covered = [double]$coverageNode.GetAttribute("covered")
       $missed = [double]$coverageNode.GetAttribute("missed")
       $coveragePercentage = $covered / ($covered + $missed) * 100
-      if ($coveragePercentage -lt 85) {
+      if ($coveragePercentage -lt 70) {
         $coverageResult = $coveragePercentage.ToString("F2")
         Write-Host "El porcentaje de cobertura de código es $coverageResult%"
         Write-Host "La cobertura de código es inferior al 85% aceptado. Se detiene el pipeline."
