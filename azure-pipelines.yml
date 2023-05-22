@@ -78,8 +78,8 @@ steps:
       docker run --rm \
         -v $(Build.SourcesDirectory):/work \
         -w /work \
-        vmarrazzo/jmeter \sh 
-        jmeter.sh -n -t $(Build.SourcesDirectory)/microservicio-spring.jmx -l $(Build.SourcesDirectory)/test-results.jtl
+        vmarrazzo/jmeter \
+        jmeter -n -t $(Build.SourcesDirectory)/microservicio-spring.jmx -l $(Build.SourcesDirectory)/test-results.jtl
   displayName: 'Run JMeter Test'
 
 
