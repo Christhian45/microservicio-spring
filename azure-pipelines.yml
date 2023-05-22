@@ -41,7 +41,7 @@ steps:
       $covered = [double]$coverageNode.GetAttribute("covered")
       $missed = [double]$coverageNode.GetAttribute("missed")
       $coveragePercentage = $covered / ($covered + $missed) * 100
-      if ($coveragePercentage -lt 70) {
+      if ($coveragePercentage -lt 85) {
         $coverageResult = $coveragePercentage.ToString("F2")
         Write-Host "El porcentaje de cobertura de código es $coverageResult%"
         Write-Host "La cobertura de código es inferior al 85% aceptado. Se detiene el pipeline."
@@ -49,7 +49,7 @@ steps:
       } else {
         $coverageResult = $coveragePercentage.ToString("F2")
         Write-Host "El porcentaje de cobertura de código es $coverageResult%"
-        Write-Host "La cobertura de código es superior al 70%. Se sigue flujo de pipeline."
+        Write-Host "La cobertura de código es superior al 85%. Se sigue flujo de pipeline."
       }
   displayName: "Verificar resultados Jacoco"
 
